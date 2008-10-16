@@ -5,7 +5,7 @@ Vendor: Samba Team
 Packager: Samba Team <samba@samba.org>
 Name: ctdb
 Version: 1.0
-Release: 46
+Release: 46-1
 Epoch: 0
 License: GNU GPL version 3
 Group: System Environment/Daemons
@@ -120,6 +120,9 @@ fi
 %{_includedir}/ctdb_private.h
 
 %changelog
+* Fri Oct 17 2008 : Version 1.0.46-1
+ - Backport bugfix for logging of multiple lines at a time.
+ - Add --script-log-level to control how eventscript/rc.local output is to be logged
 * Thu Jul 10 2008 : Version 1.0.46
  - Document both the LVS:cingle-ip-address and the REMOTE-NODE:wan-accelerator
    capabilities.
