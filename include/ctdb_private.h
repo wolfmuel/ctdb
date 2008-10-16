@@ -1376,4 +1376,6 @@ int32_t ctdb_control_trans2_finished(struct ctdb_context *ctdb,
 int32_t ctdb_control_trans2_error(struct ctdb_context *ctdb, 
 				  struct ctdb_req_control *c);
 
+extern int script_log_level;
+
 #endif

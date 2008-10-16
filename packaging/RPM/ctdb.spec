@@ -5,7 +5,7 @@ Vendor: Samba Team
 Packager: Samba Team <samba@samba.org>
 Name: ctdb
 Version: 1.0
-Release: 56_1
+Release: 56_2
 Epoch: 0
 License: GNU GPL version 3
 Group: System Environment/Daemons
@@ -118,6 +118,9 @@ fi
 %{_includedir}/ctdb_private.h
 
 %changelog
+* Fri Oct 17 2008 : Version 1.0.56-2
+ - Add an option to force all output from eventscripts and rc.local to be logged
+   at a specific log level.
 * Tue Sep 16 2008 : Version 1.0.56-1
  - backported fixes for three memory leaks from HEAD
 * Mon Aug 11 2008 : Version 1.0.56
