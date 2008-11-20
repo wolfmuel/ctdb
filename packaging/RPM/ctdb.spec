@@ -5,7 +5,7 @@ Vendor: Samba Team
 Packager: Samba Team <samba@samba.org>
 Name: ctdb
 Version: 1.0
-Release: 64
+Release: 64_1
 Epoch: 0
 License: GNU GPL version 3
 Group: System Environment/Daemons
@@ -120,6 +120,12 @@ fi
 %{_includedir}/ctdb_private.h
 
 %changelog
+* Fri Nov 21 2008 : Version 1.0.64-1
+ - In some situations when a node dissapears from the cluster it may take
+   very long for GPFS to recover and allow fcntl() locking of the 
+   recovery lock again. This can cause long recovery cycles.
+   Change this so that dusring the split-brain test, a hung/timedout lock
+   attempt is acceptable and will not lead to a failed recovery.
 * Mon Oct 22 2008 : Version 1.0.64
  - Add a context and a timed event so that once we have been in recovery for
    too long we drop all public addresses.
