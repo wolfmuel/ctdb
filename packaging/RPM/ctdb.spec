@@ -5,7 +5,7 @@ Vendor: Samba Team
 Packager: Samba Team <samba@samba.org>
 Name: ctdb
 Version: 1.0
-Release: 64_1
+Release: 64_2
 Epoch: 0
 License: GNU GPL version 3
 Group: System Environment/Daemons
@@ -120,6 +120,8 @@ fi
 %{_includedir}/ctdb_private.h
 
 %changelog
+* Thu Nov 27 2008 : Version 1.0.64-2
+ - Always send keepalive packets on the links, even if they are not idle.
 * Fri Nov 21 2008 : Version 1.0.64-1
  - In some situations when a node dissapears from the cluster it may take
    very long for GPFS to recover and allow fcntl() locking of the 
