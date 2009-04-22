@@ -5,7 +5,7 @@ Vendor: Samba Team
 Packager: Samba Team <samba@samba.org>
 Name: ctdb
 Version: 1.0
-Release: 69_1
+Release: 69_2
 Epoch: 0
 License: GNU GPL version 3
 Group: System Environment/Daemons
@@ -121,6 +121,9 @@ fi
 %{_includedir}/ctdb_private.h
 
 %changelog
+* Thu Apr 23 2009 : Version 1.0.69_2
+ - In the recovery daemon we dont need to check the nodemap status
+   of banned nodes.
 * Wed Feb 5 2009 : Version 1.0.69_1
  - Dont check the result of the modflags control, to allow compatibility
    with earlier versions of ctdb
