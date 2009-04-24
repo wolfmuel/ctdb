@@ -5,7 +5,7 @@ Vendor: Samba Team
 Packager: Samba Team <samba@samba.org>
 Name: ctdb
 Version: 1.0
-Release: 69_2
+Release: 69_3
 Epoch: 0
 License: GNU GPL version 3
 Group: System Environment/Daemons
@@ -121,6 +121,9 @@ fi
 %{_includedir}/ctdb_private.h
 
 %changelog
+* Fri Apr 24 2009 : Version 1.0.69_3
+ - Make sure that if during recovery a node is stuck and does not reply to
+   pull_db requests that we eventually ban this node from the recovery master.
 * Thu Apr 23 2009 : Version 1.0.69_2
  - In the recovery daemon we dont need to check the nodemap status
    of banned nodes.
