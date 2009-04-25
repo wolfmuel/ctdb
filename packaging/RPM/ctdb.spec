@@ -5,7 +5,7 @@ Vendor: Samba Team
 Packager: Samba Team <samba@samba.org>
 Name: ctdb
 Version: 1.0
-Release: 69_3
+Release: 69_4
 Epoch: 0
 License: GNU GPL version 3
 Group: System Environment/Daemons
@@ -121,6 +121,12 @@ fi
 %{_includedir}/ctdb_private.h
 
 %changelog
+* Sun Apr 26 2009 : Version 1.0.69_4
+ - Add TDB_NO_NESTING to the tdb layer to prevent transaction nesting.
+ - Make sure that when we start a recovery transaction that this is not a
+   nested transaction.
+ - Add a tuneable RecoveryDropAllIPs that specifies after how long being in
+   recovery mode a node will elect to drop all its public addresses.
 * Fri Apr 24 2009 : Version 1.0.69_3
  - Make sure that if during recovery a node is stuck and does not reply to
    pull_db requests that we eventually ban this node from the recovery master.
