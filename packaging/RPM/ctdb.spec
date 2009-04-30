@@ -5,7 +5,7 @@ Vendor: Samba Team
 Packager: Samba Team <samba@samba.org>
 Name: ctdb
 Version: 1.0
-Release: 69_4
+Release: 69_5
 Epoch: 0
 License: GNU GPL version 3
 Group: System Environment/Daemons
@@ -121,6 +121,12 @@ fi
 %{_includedir}/ctdb_private.h
 
 %changelog
+* Fri May 1 2009 : Version 1.0.69-5
+ - Add a new variable VerifyRecoveryLock. When set to 0 this will skip
+   the test inside the main where it verifies that the recovery masted does
+   hold the lock to the reclock file while performing a recovery.
+ - Change the timeout for waiting for a reclock child process to terminate to
+   15 seconds and increase the logging of this potentially fatal condition.
 * Sun Apr 26 2009 : Version 1.0.69_4
  - Add TDB_NO_NESTING to the tdb layer to prevent transaction nesting.
  - Make sure that when we start a recovery transaction that this is not a
