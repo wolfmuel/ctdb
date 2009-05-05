@@ -565,7 +565,7 @@ enum ctdb_controls {CTDB_CONTROL_PROCESS_EXISTS          = 0,
 		    CTDB_CONTROL_TAKEOVER_IP             = 89,
 		    CTDB_CONTROL_GET_PUBLIC_IPS          = 90,
 		    CTDB_CONTROL_GET_NODEMAP             = 91,
-		    CTDB_CONTROL_TRAVERSE_KILL		 = 92,
+		    CTDB_CONTROL_TRAVERSE_KILL		 = 97,
 };	
 
 /*
