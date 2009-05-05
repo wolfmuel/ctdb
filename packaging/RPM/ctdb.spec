@@ -131,6 +131,13 @@ fi
 %{_libdir}/pkgconfig/ctdb.pc
 
 %changelog
+<<<<<<< HEAD:packaging/RPM/ctdb.spec
+* Tue May 5 2009 : Version 1.0.69-6
+ - Try to add back the routes in 99.routing both for the takeip and also the
+   releaseip event since during releaseip) too many addresses may have been
+   deleted, causing routes to be lost.
+   See 10.interfaces for the workaround for "ip addr del" deleting too
+   many addresses.
 * Fri May 1 2009 : Version 1.0.80
  - change init shutdown level to 01 for ctdb so it stops before any of the other services
  - if we can not pull a database from a remote node during recovery, mark that node as a culprit so it becomes banned
@@ -139,6 +146,24 @@ fi
  - dont unconditionally kill off ctdb and restrat it on "service ctdb start". Fail "service ctdb start" with an error if ctdb is already running.
  - Add a new tunable "VerifyRecoveryLock" that can be set to 0 to prevent the main ctdb daemon to verify that the recovery master has locked the reclock file correctly before allowing it to set the recovery mode to active.
  - fix a cosmetic bug with ctdb statistics where certain counters could become negative.
+* Fri May 1 2009 : Version 1.0.69-5
+ - Add a new variable VerifyRecoveryLock. When set to 0 this will skip
+   the test inside the main where it verifies that the recovery masted does
+   hold the lock to the reclock file while performing a recovery.
+ - Change the timeout for waiting for a reclock child process to terminate to
+   15 seconds and increase the logging of this potentially fatal condition.
+* Sun Apr 26 2009 : Version 1.0.69_4
+ - Add TDB_NO_NESTING to the tdb layer to prevent transaction nesting.
+ - Make sure that when we start a recovery transaction that this is not a
+   nested transaction.
+ - Add a tuneable RecoveryDropAllIPs that specifies after how long being in
+   recovery mode a node will elect to drop all its public addresses.
+* Fri Apr 24 2009 : Version 1.0.69_3
+ - Make sure that if during recovery a node is stuck and does not reply to
+   pull_db requests that we eventually ban this node from the recovery master.
+* Thu Apr 23 2009 : Version 1.0.69_2
+ - In the recovery daemon we dont need to check the nodemap status
+   of banned nodes.
 * Wed Apr 8 2009 : Version 1.0.79
  - From Mathieu Parent: add a ctdb pkgconfig file
  - Fix bug 6250
@@ -184,6 +209,9 @@ fi
    using "1.0.70" as a release and "-1" as the revision instead of as
    previously using "1.0" as release and ".70" as the revision.
    By Michael Adams.
+* Wed Feb 5 2009 : Version 1.0.69_1
+ - Dont check the result of the modflags control, to allow compatibility
+   with earlier versions of ctdb
 * Thu Dec 18 2008 : Version 1.0.69
  - Various fixes to scripts by M Adam
  - Dont call ctdb_fatal() when the transport is down during shutdown
