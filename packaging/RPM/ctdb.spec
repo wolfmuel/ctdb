@@ -131,7 +131,6 @@ fi
 %{_libdir}/pkgconfig/ctdb.pc
 
 %changelog
-<<<<<<< HEAD:packaging/RPM/ctdb.spec
 * Tue May 5 2009 : Version 1.0.69-6
  - Try to add back the routes in 99.routing both for the takeip and also the
    releaseip event since during releaseip) too many addresses may have been
