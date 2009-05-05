@@ -5,7 +5,7 @@ Vendor: Samba Team
 Packager: Samba Team <samba@samba.org>
 Name: ctdb
 Version: 1.0
-Release: 69_5
+Release: 69_6
 Epoch: 0
 License: GNU GPL version 3
 Group: System Environment/Daemons
@@ -121,6 +121,12 @@ fi
 %{_includedir}/ctdb_private.h
 
 %changelog
+* Tue May 5 2009 : Version 1.0.69-6
+ - Try to add back the routes in 99.routing both for the takeip and also the
+   releaseip event since during releaseip) too many addresses may have been
+   deleted, causing routes to be lost.
+   See 10.interfaces for the workaround for "ip addr del" deleting too
+   many addresses.
 * Fri May 1 2009 : Version 1.0.69-5
  - Add a new variable VerifyRecoveryLock. When set to 0 this will skip
    the test inside the main where it verifies that the recovery masted does
