@@ -2080,7 +2080,11 @@ static int control_getvar(struct ctdb_context *ctdb, int argc, const char **argv
 		return -1;
 	}
 
-	printf("%-19s = %u\n", name, value);
+	if (options.machinereadable){
+		printf(":%s:%u:\n", name, value);
+	} else {
+		printf("%-19s = %u\n", name, value);
+	}
 	return 0;
 }
 
