@@ -5,7 +5,7 @@ Vendor: Samba Team
 Packager: Samba Team <samba@samba.org>
 Name: ctdb
 Version: 1.0.82
-Release: 2
+Release: 3
 Epoch: 0
 License: GNU GPL version 3
 Group: System Environment/Daemons
@@ -132,6 +132,8 @@ fi
 %{_libdir}/pkgconfig/ctdb.pc
 
 %changelog
+* Tue Jun 2 2009 : Version 1.0.82-3
+ - Make ctdb statistics support machinereadable output
 * Tue Jun 2 2009 : Version 1.0.82-2
  - Add machinereadable (-Y) output to ctdb listvars and ctdb getvar
  - track how long it takes for ctdbd and the recovery daemon to perform the
