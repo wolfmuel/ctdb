@@ -5,7 +5,7 @@ Vendor: Samba Team
 Packager: Samba Team <samba@samba.org>
 Name: ctdb
 Version: 1.0.82
-Release: 1
+Release: 2
 Epoch: 0
 License: GNU GPL version 3
 Group: System Environment/Daemons
@@ -132,6 +132,10 @@ fi
 %{_libdir}/pkgconfig/ctdb.pc
 
 %changelog
+* Tue Jun 2 2009 : Version 1.0.82-2
+ - Add machinereadable (-Y) output to ctdb listvars and ctdb getvar
+ - track how long it takes for ctdbd and the recovery daemon to perform the
+   rec-lock fcntl() lock attemt and show this in the ctdb statistics output.
 * Thu May 14 2009 : Version 1.0.82
  - Update the "ctdb lvsmaster" command to return -1 on error.
  - Add a -Y flag to "ctdb lvsmaster"
