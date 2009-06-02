@@ -192,29 +192,43 @@ static void show_statistics(struct ctdb_statistics *s)
 		STATISTICS_FIELD(memory_used),
 		STATISTICS_FIELD(max_hop_count),
 	};
-	printf("CTDB version %u\n", CTDB_VERSION);
-	for (i=0;i<ARRAY_SIZE(fields);i++) {
-		if (strchr(fields[i].name, '.')) {
-			preflen = strcspn(fields[i].name, ".")+1;
-			if (!prefix || strncmp(prefix, fields[i].name, preflen) != 0) {
-				prefix = fields[i].name;
-				printf(" %*.*s\n", preflen-1, preflen-1, fields[i].name);
-			}
-		} else {
-			preflen = 0;
+	if (options.machinereadable){
+		printf(":version:%u:\n", CTDB_VERSION);
+		for (i=0;i<ARRAY_SIZE(fields);i++) {
+			printf(":%s:%u:\n", 
+			       fields[i].name,
+			       *(uint32_t *)(fields[i].offset+(uint8_t *)s));
 		}
-		printf(" %*s%-22s%*s%10u\n", 
-		       preflen?4:0, "",
-		       fields[i].name+preflen, 
-		       preflen?0:4, "",
-		       *(uint32_t *)(fields[i].offset+(uint8_t *)s));
+		printf(":%s:%.6f:\n", "max_reclock_ctdbd", s->reclock.ctdbd);
+		printf(":%s:%.6f:\n", "max_reclock_recd", s->reclock.recd);
+		printf(":%s:%.6f:\n", "max_call_latency", s->max_call_latency);
+		printf(":%s:%.6f:\n", "max_lockwait_latency", s->max_lockwait_latency);
+		printf(":%s:%.6f:\n", "max_childwrite_latency", s->max_childwrite_latency);
+	} else {
+		printf("CTDB version %u\n", CTDB_VERSION);
+		for (i=0;i<ARRAY_SIZE(fields);i++) {
+			if (strchr(fields[i].name, '.')) {
+				preflen = strcspn(fields[i].name, ".")+1;
+				if (!prefix || strncmp(prefix, fields[i].name, preflen) != 0) {
+					prefix = fields[i].name;
+					printf(" %*.*s\n", preflen-1, preflen-1, fields[i].name);
+				}
+			} else {
+				preflen = 0;
+			}
+			printf(" %*s%-22s%*s%10u\n", 
+			       preflen?4:0, "",
+			       fields[i].name+preflen, 
+			       preflen?0:4, "",
+			       *(uint32_t *)(fields[i].offset+(uint8_t *)s));
+		}
+		printf(" %-30s     %.6f sec\n", "max_reclock_ctdbd", s->reclock.ctdbd);
+		printf(" %-30s     %.6f sec\n", "max_reclock_recd", s->reclock.recd);
+	
+		printf(" %-30s     %.6f sec\n", "max_call_latency", s->max_call_latency);
+		printf(" %-30s     %.6f sec\n", "max_lockwait_latency", s->max_lockwait_latency);
+		printf(" %-30s     %.6f sec\n", "max_childwrite_latency", s->max_childwrite_latency);
 	}
-	printf(" %-30s     %.6f sec\n", "max_reclock_ctdbd", s->reclock.ctdbd);
-	printf(" %-30s     %.6f sec\n", "max_reclock_recd", s->reclock.recd);
-
-	printf(" %-30s     %.6f sec\n", "max_call_latency", s->max_call_latency);
-	printf(" %-30s     %.6f sec\n", "max_lockwait_latency", s->max_lockwait_latency);
-	printf(" %-30s     %.6f sec\n", "max_childwrite_latency", s->max_childwrite_latency);
 	talloc_free(tmp_ctx);
 }
 
