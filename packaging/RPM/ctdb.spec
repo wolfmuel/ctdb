@@ -5,7 +5,7 @@ Vendor: Samba Team
 Packager: Samba Team <samba@samba.org>
 Name: ctdb
 Version: 1.0.82
-Release: 3
+Release: 4
 Epoch: 0
 License: GNU GPL version 3
 Group: System Environment/Daemons
@@ -132,6 +132,8 @@ fi
 %{_libdir}/pkgconfig/ctdb.pc
 
 %changelog
+* Tue Jun 9 2009 : Version 1.0.83-4
+ - dont delete the socket when exiting ctdb
 * Tue Jun 2 2009 : Version 1.0.82-3
  - Make ctdb statistics support machinereadable output
 * Tue Jun 2 2009 : Version 1.0.82-2
