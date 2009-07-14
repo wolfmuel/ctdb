@@ -5,7 +5,7 @@ Vendor: Samba Team
 Packager: Samba Team <samba@samba.org>
 Name: ctdb
 Version: 1.0.82
-Release: 5
+Release: 6
 Epoch: 0
 License: GNU GPL version 3
 Group: System Environment/Daemons
@@ -132,6 +132,8 @@ fi
 %{_libdir}/pkgconfig/ctdb.pc
 
 %changelog
+* Tue Jul 14 2009 : Version 1.0.82-6
+ - change loglevel for registering tcp clients
 * Wed Jun 10 2009 : Version 1.0.82-5
  - When banning a node, only drop all ips on the node being banned, not all nodes.
 * Tue Jun 9 2009 : Version 1.0.82-4
