@@ -5,7 +5,7 @@ Vendor: Samba Team
 Packager: Samba Team <samba@samba.org>
 Name: ctdb
 Version: 1.0.82
-Release: 6
+Release: 7
 Epoch: 0
 License: GNU GPL version 3
 Group: System Environment/Daemons
@@ -132,6 +132,9 @@ fi
 %{_libdir}/pkgconfig/ctdb.pc
 
 %changelog
+* Mon Jul 27 2009 : Version 1.0.82-7
+ - Better logmessages when the system is shutting down and fails to allocate a network packet.
+ - Reorder the eventscripts for static routes to run before the service scripts
 * Tue Jul 14 2009 : Version 1.0.82-6
  - change loglevel for registering tcp clients
 * Wed Jun 10 2009 : Version 1.0.82-5
