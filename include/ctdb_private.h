@@ -108,6 +108,8 @@ struct ctdb_tunable {
 	uint32_t reclock_latency_ms;
 	uint32_t recovery_drop_all_ips;
 	uint32_t verify_recovery_lock;
+	uint32_t vacuum_default_interval;
+	uint32_t vacuum_max_run_time;
 };
 
 /*
@@ -436,6 +438,7 @@ struct ctdb_db_context {
 	uint32_t seqnum;
 	struct timed_event *te;
 	struct ctdb_traverse_local_handle *traverse;
+	struct ctdb_vacuum_handle *vacuum_handle;
 };
 
 
@@ -1439,5 +1442,7 @@ int32_t ctdb_control_get_event_script_status(struct ctdb_context *ctdb, TDB_DATA
 
 int ctdb_log_event_script_output(struct ctdb_context *ctdb, char *str, uint16_t len);
 int ctdb_ctrl_report_recd_lock_latency(struct ctdb_context *ctdb, struct timeval timeout, double latency);
+
+int ctdb_vacuum_init(struct ctdb_db_context *ctdb_db);
 
 #endif
