@@ -5,7 +5,7 @@ Vendor: Samba Team
 Packager: Samba Team <samba@samba.org>
 Name: ctdb
 Version: 1.0.82
-Release: 7
+Release: 8
 Epoch: 0
 License: GNU GPL version 3
 Group: System Environment/Daemons
@@ -133,6 +133,9 @@ fi
 %{_libdir}/pkgconfig/ctdb.pc
 
 %changelog
+* Fri Oct 2 2009 : Version 1.0.82-8
+ - Backported new vacuuming design from HEAD
+ - Backported new eventscript 01.reclock from HEAD
 * Mon Jul 27 2009 : Version 1.0.82-7
  - Better logmessages when the system is shutting down and fails to allocate a network packet.
  - Reorder the eventscripts for static routes to run before the service scripts
