@@ -636,4 +636,12 @@ int ctdb_ctrl_getscriptstatus(struct ctdb_context *ctdb,
 		    TALLOC_CTX *mem_ctx, struct ctdb_monitoring_wire **script_status);
 
 
+
+struct ctdb_db_priority {
+	uint32_t db_id;
+	uint32_t priority;
+};
+
+int ctdb_ctrl_set_db_priority(struct ctdb_context *ctdb, struct timeval timeout, uint32_t destnode, struct ctdb_db_priority *db_prio);
+
 #endif
