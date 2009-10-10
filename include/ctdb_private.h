@@ -577,6 +577,7 @@ enum ctdb_controls {CTDB_CONTROL_PROCESS_EXISTS          = 0,
 		    CTDB_CONTROL_TRAVERSE_KILL		 = 97,
 		    CTDB_CONTROL_RECD_RECLOCK_LATENCY    = 98,
 		    CTDB_CONTROL_SET_DB_PRIORITY         = 111,
+		    CTDB_CONTROL_GET_DB_PRIORITY         = 112,
 };	
 
 /*
