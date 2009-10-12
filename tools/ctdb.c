@@ -782,7 +782,7 @@ ctdb_sock_addr *addr)
 
 	/* send release ip to all nodes */
 	if (ctdb_client_async_control(ctdb, CTDB_CONTROL_RELEASE_IP,
-			list_of_active_nodes(ctdb, nodemap, ctdb, true),
+			list_of_active_nodes(ctdb, nodemap, ctdb, true), 0,
 			TIMELIMIT(), false, data,
 			NULL, NULL, NULL) != 0) {
 		DEBUG(DEBUG_ERR, (__location__ " Unable to send 'ReleaseIP' to all nodes.\n"));
