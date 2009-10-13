@@ -2250,16 +2250,8 @@ static int control_setdebug(struct ctdb_context *ctdb, int argc, const char **ar
 static int control_freeze(struct ctdb_context *ctdb, int argc, const char **argv)
 {
 	int ret;
-	uint32_t priority;
-	
-	if (argc == 1) {
-		priority = strtol(argv[0], NULL, 0);
-	} else {
-		priority = 0;
-	}
-	DEBUG(DEBUG_ERR,("Freeze by priority %u\n", priority));
 
-	ret = ctdb_ctrl_freeze_priority(ctdb, TIMELIMIT(), options.pnn, priority);
+	ret = ctdb_ctrl_freeze(ctdb, TIMELIMIT(), options.pnn);
 	if (ret != 0) {
 		DEBUG(DEBUG_ERR, ("Unable to freeze node %u\n", options.pnn));
 	}		
@@ -2272,16 +2264,8 @@ static int control_freeze(struct ctdb_context *ctdb, int argc, const char **argv
 static int control_thaw(struct ctdb_context *ctdb, int argc, const char **argv)
 {
 	int ret;
-	uint32_t priority;
-	
-	if (argc == 1) {
-		priority = strtol(argv[0], NULL, 0);
-	} else {
-		priority = 0;
-	}
-	DEBUG(DEBUG_ERR,("Thaw by priority %u\n", priority));
 
-	ret = ctdb_ctrl_thaw_priority(ctdb, TIMELIMIT(), options.pnn, priority);
+	ret = ctdb_ctrl_thaw(ctdb, TIMELIMIT(), options.pnn);
 	if (ret != 0) {
 		DEBUG(DEBUG_ERR, ("Unable to thaw node %u\n", options.pnn));
 	}		
@@ -2943,8 +2927,8 @@ static const struct {
 	{ "unban",           control_unban,             true,	false,  "unban a node from the cluster" },
 	{ "shutdown",        control_shutdown,          true,	false,  "shutdown ctdbd" },
 	{ "recover",         control_recover,           true,	false,  "force recovery" },
-	{ "freeze",          control_freeze,            true,	false,  "freeze databases", "[priority:1-3]" },
-	{ "thaw",            control_thaw,              true,	false,  "thaw databases", "[priority:1-3]" },
+	{ "freeze",          control_freeze,            true,	false,  "freeze all databases" },
+	{ "thaw",            control_thaw,              true,	false,  "thaw all databases" },
 	{ "isnotrecmaster",  control_isnotrecmaster,    false,	false,  "check if the local node is recmaster or not" },
 	{ "killtcp",         kill_tcp,                  false,	false, "kill a tcp connection.", "<srcip:port> <dstip:port>" },
 	{ "gratiousarp",     control_gratious_arp,      false,	false, "send a gratious arp", "<ip> <interface>" },

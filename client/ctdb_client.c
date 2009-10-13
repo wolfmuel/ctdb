@@ -1943,9 +1943,9 @@ int ctdb_ctrl_getpid(struct ctdb_context *ctdb, struct timeval timeout, uint32_t
   async freeze send control
  */
 struct ctdb_client_control_state *
-ctdb_ctrl_freeze_send(struct ctdb_context *ctdb, TALLOC_CTX *mem_ctx, struct timeval timeout, uint32_t destnode, uint32_t priority)
+ctdb_ctrl_freeze_send(struct ctdb_context *ctdb, TALLOC_CTX *mem_ctx, struct timeval timeout, uint32_t destnode)
 {
-	return ctdb_control_send(ctdb, destnode, priority, 
+	return ctdb_control_send(ctdb, destnode, 0, 
 			   CTDB_CONTROL_FREEZE, 0, tdb_null, 
 			   mem_ctx, &timeout, NULL);
 }
@@ -1968,36 +1968,30 @@ int ctdb_ctrl_freeze_recv(struct ctdb_context *ctdb, TALLOC_CTX *mem_ctx, struct
 }
 
 /*
-  freeze databases of a certain priority
+  freeze a node
  */
-int ctdb_ctrl_freeze_priority(struct ctdb_context *ctdb, struct timeval timeout, uint32_t destnode, uint32_t priority)
+int ctdb_ctrl_freeze(struct ctdb_context *ctdb, struct timeval timeout, uint32_t destnode)
 {
 	TALLOC_CTX *tmp_ctx = talloc_new(ctdb);
 	struct ctdb_client_control_state *state;
 	int ret;
 
-	state = ctdb_ctrl_freeze_send(ctdb, tmp_ctx, timeout, destnode, priority);
+	state = ctdb_ctrl_freeze_send(ctdb, tmp_ctx, timeout, destnode);
 	ret = ctdb_ctrl_freeze_recv(ctdb, tmp_ctx, state);
 	talloc_free(tmp_ctx);
 
 	return ret;
 }
 
-/* Freeze all databases */
-int ctdb_ctrl_freeze(struct ctdb_context *ctdb, struct timeval timeout, uint32_t destnode)
-{
-	return ctdb_ctrl_freeze_priority(ctdb, timeout, destnode, 0);
-}
-
 /*
-  thaw databases of a certain priority
+  thaw a node
  */
-int ctdb_ctrl_thaw_priority(struct ctdb_context *ctdb, struct timeval timeout, uint32_t destnode, uint32_t priority)
+int ctdb_ctrl_thaw(struct ctdb_context *ctdb, struct timeval timeout, uint32_t destnode)
 {
 	int ret;
 	int32_t res;
 
-	ret = ctdb_control(ctdb, destnode, priority, 
+	ret = ctdb_control(ctdb, destnode, 0, 
 			   CTDB_CONTROL_THAW, 0, tdb_null, 
 			   NULL, NULL, &res, &timeout, NULL);
 	if (ret != 0 || res != 0) {
@@ -2006,12 +2000,6 @@ int ctdb_ctrl_thaw_priority(struct ctdb_context *ctdb, struct timeval timeout, u
 	}
 
 	return 0;
-}
-
-/* thaw all databases */
-int ctdb_ctrl_thaw(struct ctdb_context *ctdb, struct timeval timeout, uint32_t destnode)
-{
-	return ctdb_ctrl_thaw_priority(ctdb, timeout, destnode, 0);
 }
 
 /*

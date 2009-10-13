@@ -243,9 +243,6 @@ void ctdb_start_freeze(struct ctdb_context *ctdb)
 int32_t ctdb_control_freeze(struct ctdb_context *ctdb, struct ctdb_req_control *c, bool *async_reply)
 {
 	struct ctdb_freeze_waiter *w;
-	uint32_t priority;
-
-	priority = (uint32_t)c->srvid;
 
 	if (ctdb->freeze_mode == CTDB_FREEZE_FROZEN) {
 		/* we're already frozen */
@@ -289,12 +286,8 @@ bool ctdb_blocking_freeze(struct ctdb_context *ctdb)
 /*
   thaw the databases
  */
-int32_t ctdb_control_thaw(struct ctdb_context *ctdb, struct ctdb_req_control *c)
+int32_t ctdb_control_thaw(struct ctdb_context *ctdb)
 {
-	uint32_t priority;
-
-	priority = (uint32_t)c->srvid;
-
 	/* cancel any pending transactions */
 	if (ctdb->freeze_handle && ctdb->freeze_handle->transaction_started) {
 		struct ctdb_db_context *ctdb_db;
