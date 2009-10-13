@@ -434,7 +434,6 @@ struct ctdb_db_context {
 	struct ctdb_db_context *next, *prev;
 	struct ctdb_context *ctdb;
 	uint32_t db_id;
-	uint32_t priority;
 	bool persistent;
 	const char *db_name;
 	const char *db_path;
@@ -576,7 +575,6 @@ enum ctdb_controls {CTDB_CONTROL_PROCESS_EXISTS          = 0,
 		    CTDB_CONTROL_GET_EVENT_SCRIPT_STATUS = 96,
 		    CTDB_CONTROL_TRAVERSE_KILL		 = 97,
 		    CTDB_CONTROL_RECD_RECLOCK_LATENCY    = 98,
-		    CTDB_CONTROL_SET_DB_PRIORITY         = 111,
 };	
 
 /*
@@ -1450,7 +1448,5 @@ int ctdb_log_event_script_output(struct ctdb_context *ctdb, char *str, uint16_t 
 int ctdb_ctrl_report_recd_lock_latency(struct ctdb_context *ctdb, struct timeval timeout, double latency);
 
 int ctdb_vacuum_init(struct ctdb_db_context *ctdb_db);
-
-int32_t ctdb_control_set_db_priority(struct ctdb_context *ctdb, TDB_DATA indata);
 
 #endif

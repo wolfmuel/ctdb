@@ -445,11 +445,6 @@ static int32_t ctdb_control_dispatch(struct ctdb_context *ctdb,
 		CHECK_CONTROL_DATA_SIZE(sizeof(double));
 		ctdb_reclock_latency(ctdb, "recd reclock", &ctdb->statistics.reclock.recd, *((double *)indata.dptr));
 		return 0;
-
-	case CTDB_CONTROL_SET_DB_PRIORITY:
-		CHECK_CONTROL_DATA_SIZE(sizeof(struct ctdb_db_priority));
-		return ctdb_control_set_db_priority(ctdb, indata);
-
 	default:
 		DEBUG(DEBUG_CRIT,(__location__ " Unknown CTDB control opcode %u\n", opcode));
 		return -1;
