@@ -343,7 +343,13 @@ void ctdb_request_dmaster(struct ctdb_context *ctdb, struct ctdb_req_header *hdr
 			 (unsigned long long)c->rsn, (unsigned long long)header.rsn, c->hdr.reqid,
 			 (key.dsize >= 4)?(*(uint32_t *)key.dptr):0));
 		if (header.rsn != 0 || header.dmaster != ctdb->pnn) {
-			ctdb_fatal(ctdb, "ctdb_req_dmaster from non-master");
+			/*
+			 * we used to exit here with a ctdb_fatal(ctdb, "ctdb_req_dmaster from non-master");
+			 * as long as we haven't found a protocol problem we just initiate recovery
+			 */
+			DEBUG(DEBUG_ALERT,(__location__"real-dmaster problem triggering recovery\n"));
+			ctdb->recovery_mode = CTDB_RECOVERY_ACTIVE;
+			ctdb_ltdb_unlock(ctdb_db, key);
 			return;
 		}
 	}
