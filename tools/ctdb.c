@@ -780,6 +780,7 @@ ctdb_sock_addr *addr)
 	data.dsize = sizeof(pip);
 	data.dptr  = (unsigned char *)&pip;
 
+
 	/* send release ip to all nodes */
 	if (ctdb_client_async_control(ctdb, CTDB_CONTROL_RELEASE_IP,
 			list_of_active_nodes(ctdb, nodemap, ctdb, true),
@@ -1699,7 +1700,7 @@ static int control_recover(struct ctdb_context *ctdb, int argc, const char **arg
 	/* record the current generation number */
 	generation = get_generation(ctdb);
 
-	ret = ctdb_ctrl_freeze_priority(ctdb, TIMELIMIT(), options.pnn, 1);
+	ret = ctdb_ctrl_freeze(ctdb, TIMELIMIT(), options.pnn);
 	if (ret != 0) {
 		DEBUG(DEBUG_ERR, ("Unable to freeze node\n"));
 		return ret;
@@ -2556,7 +2557,7 @@ static int control_restoredb(struct ctdb_context *ctdb, int argc, const char **a
 	struct ctdb_db_context *ctdb_db;
 	struct ctdb_node_map *nodemap=NULL;
 	struct ctdb_vnn_map *vnnmap=NULL;
-	int i, fh;
+	int fh;
 	struct ctdb_control_wipe_database w;
 	uint32_t *nodes;
 	uint32_t generation;
@@ -2623,18 +2624,15 @@ static int control_restoredb(struct ctdb_context *ctdb, int argc, const char **a
 
 	/* freeze all nodes */
 	nodes = list_of_active_nodes(ctdb, nodemap, tmp_ctx, true);
-	for (i=1; i<=NUM_DB_PRIORITIES; i++) {
-		if (ctdb_client_async_control(ctdb, CTDB_CONTROL_FREEZE,
-					nodes, i,
-					TIMELIMIT(),
+	if (ctdb_client_async_control(ctdb, CTDB_CONTROL_FREEZE,
+					nodes, TIMELIMIT(),
 					false, tdb_null,
 					NULL, NULL,
 					NULL) != 0) {
-			DEBUG(DEBUG_ERR, ("Unable to freeze nodes.\n"));
-			ctdb_ctrl_setrecmode(ctdb, TIMELIMIT(), options.pnn, CTDB_RECOVERY_ACTIVE);
-			talloc_free(tmp_ctx);
-			return -1;
-		}
+		DEBUG(DEBUG_ERR, ("Unable to freeze nodes.\n"));
+		ctdb_ctrl_setrecmode(ctdb, TIMELIMIT(), options.pnn, CTDB_RECOVERY_ACTIVE);
+		talloc_free(tmp_ctx);
+		return -1;
 	}
 
 	generation = vnnmap->generation;
@@ -2644,7 +2642,7 @@ static int control_restoredb(struct ctdb_context *ctdb, int argc, const char **a
 	/* start a cluster wide transaction */
 	nodes = list_of_active_nodes(ctdb, nodemap, tmp_ctx, true);
 	if (ctdb_client_async_control(ctdb, CTDB_CONTROL_TRANSACTION_START,
-					nodes, 0,
+					nodes,
 					TIMELIMIT(), false, data,
 					NULL, NULL,
 					NULL) != 0) {
@@ -2662,7 +2660,7 @@ static int control_restoredb(struct ctdb_context *ctdb, int argc, const char **a
 	/* wipe all the remote databases. */
 	nodes = list_of_active_nodes(ctdb, nodemap, tmp_ctx, true);
 	if (ctdb_client_async_control(ctdb, CTDB_CONTROL_WIPE_DATABASE,
-					nodes, 0,
+					nodes,
 					TIMELIMIT(), false, data,
 					NULL, NULL,
 					NULL) != 0) {
@@ -2675,7 +2673,7 @@ static int control_restoredb(struct ctdb_context *ctdb, int argc, const char **a
 	/* push the database */
 	nodes = list_of_active_nodes(ctdb, nodemap, tmp_ctx, true);
 	if (ctdb_client_async_control(ctdb, CTDB_CONTROL_PUSH_DB,
-					nodes, 0,
+					nodes,
 					TIMELIMIT(), false, outdata,
 					NULL, NULL,
 					NULL) != 0) {
@@ -2690,7 +2688,7 @@ static int control_restoredb(struct ctdb_context *ctdb, int argc, const char **a
 
 	/* commit all the changes */
 	if (ctdb_client_async_control(ctdb, CTDB_CONTROL_TRANSACTION_COMMIT,
-					nodes, 0,
+					nodes,
 					TIMELIMIT(), false, data,
 					NULL, NULL,
 					NULL) != 0) {
@@ -2704,8 +2702,7 @@ static int control_restoredb(struct ctdb_context *ctdb, int argc, const char **a
 	/* thaw all nodes */
 	nodes = list_of_active_nodes(ctdb, nodemap, tmp_ctx, true);
 	if (ctdb_client_async_control(ctdb, CTDB_CONTROL_THAW,
-					nodes, 0,
-					TIMELIMIT(),
+					nodes, TIMELIMIT(),
 					false, tdb_null,
 					NULL, NULL,
 					NULL) != 0) {
