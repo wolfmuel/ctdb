@@ -5,7 +5,7 @@ Vendor: Samba Team
 Packager: Samba Team <samba@samba.org>
 Name: ctdb
 Version: 1.0.82
-Release: 12
+Release: 13
 Epoch: 0
 License: GNU GPL version 3
 Group: System Environment/Daemons
@@ -133,6 +133,8 @@ fi
 %{_libdir}/pkgconfig/ctdb.pc
 
 %changelog
+* Wed Oct 14 2009 : Version 1.0.82-13
+ - Recover the database instead of shutting down when there is a dmaster error detected - from Wolfgang Mueller.
 * Tue Oct 13 2009 : Version 1.0.82-12
  - Revert the lock order patch and apply a simpler workaround from Volker instead.
 * Thu Oct 10 2009 : Version 1.0.82-10
