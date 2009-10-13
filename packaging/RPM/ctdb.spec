@@ -5,7 +5,7 @@ Vendor: Samba Team
 Packager: Samba Team <samba@samba.org>
 Name: ctdb
 Version: 1.0.82
-Release: 10
+Release: 12
 Epoch: 0
 License: GNU GPL version 3
 Group: System Environment/Daemons
@@ -133,6 +133,8 @@ fi
 %{_libdir}/pkgconfig/ctdb.pc
 
 %changelog
+* Tue Oct 13 2009 : Version 1.0.82-12
+ - Revert the lock order patch and apply a simpler workaround from Volker instead.
 * Thu Oct 10 2009 : Version 1.0.82-10
  - Be very aggressive to ban nocdes that fails to freeze the databases
 * Fri Oct 2 2009 : Version 1.0.82-9
