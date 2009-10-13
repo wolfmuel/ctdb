@@ -34,6 +34,17 @@ static int ctdb_lock_all_databases(struct ctdb_context *ctdb)
 {
 	struct ctdb_db_context *ctdb_db;
 	for (ctdb_db=ctdb->db_list;ctdb_db;ctdb_db=ctdb_db->next) {
+		if (strstr(ctdb_db->db_name, "notify") != NULL) {
+			continue;
+		}
+		if (tdb_lockall(ctdb_db->ltdb->tdb) != 0) {
+			return -1;
+		}
+	}
+	for (ctdb_db=ctdb->db_list;ctdb_db;ctdb_db=ctdb_db->next) {
+		if (strstr(ctdb_db->db_name, "notify") == NULL) {
+			continue;
+		}
 		if (tdb_lockall(ctdb_db->ltdb->tdb) != 0) {
 			return -1;
 		}
