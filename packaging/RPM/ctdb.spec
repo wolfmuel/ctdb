@@ -5,7 +5,7 @@ Vendor: Samba Team
 Packager: Samba Team <samba@samba.org>
 Name: ctdb
 Version: 1.0.82
-Release: 11
+Release: 10
 Epoch: 0
 License: GNU GPL version 3
 Group: System Environment/Daemons
@@ -133,10 +133,6 @@ fi
 %{_libdir}/pkgconfig/ctdb.pc
 
 %changelog
-* Mon Oct 12 2009 : Version 1.0.82-11
- - Backport the "freeze databases by priority" from HEAD to handle
-   that samba now can hold a log on a database while requesting data
-   from a different database.
 * Thu Oct 10 2009 : Version 1.0.82-10
  - Be very aggressive to ban nocdes that fails to freeze the databases
 * Fri Oct 2 2009 : Version 1.0.82-9
