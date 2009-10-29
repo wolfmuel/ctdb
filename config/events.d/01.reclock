@@ -30,7 +30,7 @@ case $cmd in
 		ctdb shutdown
 	}
 
-	RECLOCKFILE=`ctdb -Y getreclock`
+	RECLOCKFILE=$CTDB_RECOVERY_LOCK
 	[ -z "$RECLOCKFILE" ] && {
 		# we are not using a reclock file
 		echo -n > $RECLOCKCOUNT
