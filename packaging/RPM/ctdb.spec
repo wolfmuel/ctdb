@@ -5,7 +5,7 @@ Vendor: Samba Team
 Packager: Samba Team <samba@samba.org>
 Name: ctdb
 Version: 1.0.82
-Release: 13
+Release: 15
 Epoch: 0
 License: GNU GPL version 3
 Group: System Environment/Daemons
@@ -133,6 +133,11 @@ fi
 %{_libdir}/pkgconfig/ctdb.pc
 
 %changelog
+* Thu Oct 29 2009 : Version 1.0.82-15
+ - From wolfgang m: fix a bug int eh vacuuming
+ - revert the previous dmaster bug workaround, was the same bug as above
+ - dont use the getreclock command in the eventscript, we dont support it
+   in this version
 * Wed Oct 14 2009 : Version 1.0.82-13
  - Recover the database instead of shutting down when there is a dmaster error detected - from Wolfgang Mueller.
 * Tue Oct 13 2009 : Version 1.0.82-12
