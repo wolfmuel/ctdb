@@ -75,7 +75,15 @@ void ctdb_tcp_read_cb(uint8_t *data, size_t cnt, void *args)
 	return;
 
 failed:
-	talloc_free(in);
+	/*
+	 * removed the talloc_free(in) in order to prevent a double free on 'in'
+	 * Questions: 
+	 *  - Are we introducing a memory leak? I don't think so.
+	 *  - Is there a destructor missing that removes this block from the queue
+	 *    it was already added? Yes, I think this is missing.
+	 *  - Why do we get such invalid packages? Hmm....
+	 */
+	return;
 }
 
 /*
