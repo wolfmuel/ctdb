@@ -1992,11 +1992,46 @@ static void push_flags_handler(struct ctdb_context *ctdb, uint64_t srvid,
 {
 	int ret;
 	struct ctdb_node_flag_change *c = (struct ctdb_node_flag_change *)data.dptr;
+	struct ctdb_node_map *nodemap=NULL;
+	TALLOC_CTX *tmp_ctx = talloc_new(ctdb);
+	uint32_t recmaster;
+	uint32_t *nodes;
 
-	ret = ctdb_ctrl_modflags(ctdb, CONTROL_TIMEOUT(), c->pnn, c->new_flags, ~c->new_flags);
+	/* find the recovery master */
+	ret = ctdb_ctrl_getrecmaster(ctdb, tmp_ctx, CONTROL_TIMEOUT(), CTDB_CURRENT_NODE, &recmaster);
 	if (ret != 0) {
-		DEBUG(DEBUG_ERR, (__location__ " Unable to update nodeflags on remote nodes\n"));
+		DEBUG(DEBUG_ERR, (__location__ " Unable to get recmaster from local node\n"));
+		talloc_free(tmp_ctx);
+		return;
 	}
+	/* read the node flags from the recmaster */
+ 
+	ret = ctdb_ctrl_getnodemap(ctdb, CONTROL_TIMEOUT(), recmaster, tmp_ctx, &nodemap);
+ 	if (ret != 0) {
+		DEBUG(DEBUG_ERR, (__location__ " Unable to get nodemap from node %u\n", c->pnn));
+		talloc_free(tmp_ctx);
+		return;
+	}
+
+	if (c->pnn >= nodemap->num) {
+		DEBUG(DEBUG_ERR,(__location__ " Nodemap from recmaster does not contain node %d\n", c->pnn));
+		talloc_free(tmp_ctx);
+		return;
+	}
+
+	/* send the flags update to all connected nodes */
+	nodes = list_of_connected_nodes(ctdb, nodemap, tmp_ctx, true);
+
+	if (ctdb_client_async_control(ctdb, CTDB_CONTROL_MODIFY_FLAGS,
+								  nodes, CONTROL_TIMEOUT(),
+								  false, data,
+								  NULL, NULL,
+								  NULL) != 0) {
+		DEBUG(DEBUG_ERR, (__location__ " ctdb_control to modify node flags failed\n"));
+		talloc_free(tmp_ctx);
+		return;
+ 	}
+	talloc_free(tmp_ctx);
 }
 
 
@@ -2739,6 +2774,9 @@ again:
 				  nodemap->nodes[i].pnn, 
 				  remote_nodemaps[j]->nodes[i].flags,
 				  nodemap->nodes[j].flags));
+
+				ctdb_set_culprit_count(rec, nodemap->nodes[j].pnn, 4);
+
 				if (i == j) {
 					DEBUG(DEBUG_ERR,("Use flags 0x%02x from remote node %d for cluster update of its own flags\n", remote_nodemaps[j]->nodes[i].flags, j));
 					update_flags_on_all_nodes(ctdb, nodemap, nodemap->nodes[i].pnn, remote_nodemaps[j]->nodes[i].flags);
