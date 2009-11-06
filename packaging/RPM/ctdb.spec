@@ -5,7 +5,7 @@ Vendor: Samba Team
 Packager: Samba Team <samba@samba.org>
 Name: ctdb
 Version: 1.0.82
-Release: 15
+Release: 16
 Epoch: 0
 License: GNU GPL version 3
 Group: System Environment/Daemons
@@ -133,6 +133,9 @@ fi
 %{_libdir}/pkgconfig/ctdb.pc
 
 %changelog
+* Fri Nov 6 2009 : Version 1.0.82-16
+ - a tallock free bug in tcp transport   fixed by wolfgang mueller
+ - make sure to ban nodes quuickly if they disagree on the flags of the nodes in teh cluster
 * Thu Oct 29 2009 : Version 1.0.82-15
  - From wolfgang m: fix a bug int eh vacuuming
  - revert the previous dmaster bug workaround, was the same bug as above
