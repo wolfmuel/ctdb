@@ -5,7 +5,7 @@ Vendor: Samba Team
 Packager: Samba Team <samba@samba.org>
 Name: ctdb
 Version: 1.0.112
-Release: 5
+Release: 6
 Epoch: 0
 License: GNU GPL version 3
 Group: System Environment/Daemons
@@ -123,6 +123,16 @@ rm -rf $RPM_BUILD_ROOT
 %{_docdir}/ctdb/tests/bin/ctdb_transaction
 
 %changelog
+* Tue Feb 9 2010 : Version 1.0.112-6
+ - Reduce the log level for debug messages related to tracking filedescriptors
+   being created.
+ - Update the linked list macros to provide efficient O(1) behaviour for
+   adding new entries to the tail of the list. This allows much larger lists.
+ - Increase the packet queue list to host 1000000 entries instead of 1000.
+ - when a smbd has hung and the packet queue has filled up. Close that client
+   instead of starting to discard packets. Discarding packets could discard
+   traversal related packets and could cause smbd to block indefinitely.
+ - fix the printout of high latency in the log.
 * Tue Feb 2 2010 : Version 1.0.112-5
  - Patch from Volker to fix a TDB transaction rolling back issue.
 * Wed Jan 21 2010 : Version 1.0.112-4
