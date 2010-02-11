@@ -5,7 +5,7 @@ Vendor: Samba Team
 Packager: Samba Team <samba@samba.org>
 Name: ctdb
 Version: 1.0.112
-Release: 6
+Release: 7
 Epoch: 0
 License: GNU GPL version 3
 Group: System Environment/Daemons
@@ -123,6 +123,11 @@ rm -rf $RPM_BUILD_ROOT
 %{_docdir}/ctdb/tests/bin/ctdb_transaction
 
 %changelog
+* Thu Feb 11 2010 : Version 1.0.112-7
+ - Add logging of process if we detect we have started to swap from
+   the 00.ctdb eventscript.
+ - Reduce the log level of various messages to stop them spamming the log file
+ - Add a variable to disable checking if kNFSd has hung/died or not
 * Tue Feb 9 2010 : Version 1.0.112-6
  - Reduce the log level for debug messages related to tracking filedescriptors
    being created.
