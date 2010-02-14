@@ -5,7 +5,7 @@ Vendor: Samba Team
 Packager: Samba Team <samba@samba.org>
 Name: ctdb
 Version: 1.0.112
-Release: 7
+Release: 8
 Epoch: 0
 License: GNU GPL version 3
 Group: System Environment/Daemons
@@ -123,6 +123,11 @@ rm -rf $RPM_BUILD_ROOT
 %{_docdir}/ctdb/tests/bin/ctdb_transaction
 
 %changelog
+* Mon Feb 15 2010 : Version 1.0.112-8
+ - dont increase the tdb seqnum when we just do a dmsater migration
+   this prevents trashing for notify.tdb and registry.tdb since
+   smbd uses tdb seqnums for these databases.
+ - try to restart rpc.rquotad if it is not running
 * Thu Feb 11 2010 : Version 1.0.112-7
  - Add logging of process if we detect we have started to swap from
    the 00.ctdb eventscript.
