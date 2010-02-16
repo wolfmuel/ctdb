@@ -5,7 +5,7 @@ Vendor: Samba Team
 Packager: Samba Team <samba@samba.org>
 Name: ctdb
 Version: 1.0.112
-Release: 8
+Release: 9
 Epoch: 0
 License: GNU GPL version 3
 Group: System Environment/Daemons
@@ -123,6 +123,8 @@ rm -rf $RPM_BUILD_ROOT
 %{_docdir}/ctdb/tests/bin/ctdb_transaction
 
 %changelog
+* Tue Feb 16 2010 : Version 1.0.112-9
+ - treat all scripts that hang (except for startup) as success even if they hung
 * Mon Feb 15 2010 : Version 1.0.112-8
  - dont increase the tdb seqnum when we just do a dmsater migration
    this prevents trashing for notify.tdb and registry.tdb since
