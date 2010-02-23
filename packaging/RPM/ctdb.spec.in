@@ -5,7 +5,7 @@ Vendor: Samba Team
 Packager: Samba Team <samba@samba.org>
 Name: ctdb
 Version: 1.0.112
-Release: 9
+Release: 10
 Epoch: 0
 License: GNU GPL version 3
 Group: System Environment/Daemons
@@ -123,6 +123,16 @@ rm -rf $RPM_BUILD_ROOT
 %{_docdir}/ctdb/tests/bin/ctdb_transaction
 
 %changelog
+* Tue Feb 23 2010 : Version 1.0.112-10
+ - revert the change in 10.0.0.112-9 and make a new attempt to make the scripts behave.
+ - make writing the ticklelist in 61.nfstickle a background task to avoid
+   having a long cluster fs pause cause a node to become unhealthy
+ - critical bugfix. during an error path in the "end recovery" code
+   we could release a memory block before we had finished referencing it
+   which could lead to a segv.   bz 61068
+ - make sure we tear down the natgw configuration when a node become stopped
+   or else we might end up with a duplicate ip address when a different node
+   takes over the natgw role.   bz 61036
 * Tue Feb 16 2010 : Version 1.0.112-9
  - treat all scripts that hang (except for startup) as success even if they hung
 * Mon Feb 15 2010 : Version 1.0.112-8
