@@ -15,6 +15,19 @@ ctdb_start_stop_service
 
 [ -z "$NFS_TICKLE_SHARED_DIRECTORY" ] && exit 0
 
+store_tickles()
+{
+	mydir=$NFS_TICKLE_SHARED_DIRECTORY/`hostname`
+	rm -f $mydir/*
+	# record our connections to shared storage
+	netstat -tn |egrep '^tcp[[:space:]]+[0-9]+[[:space:]]+[0-9]+[[:space:]]+[0-9\.]+:2049.*ESTABLISHED' |
+		awk '{print $4" "$5}' | 
+		while read dest src; do
+			ip=${dest%:*}
+			echo $src >> $mydir/$ip
+		done
+}
+
 case "$1" in 
      startup)
 	ctdb_service_start
@@ -39,15 +52,7 @@ case "$1" in
 	;;
 
      monitor)
-	mydir=$NFS_TICKLE_SHARED_DIRECTORY/`hostname`
-	rm -f $mydir/*
-	# record our connections to shared storage
-	netstat -tn |egrep '^tcp[[:space:]]+[0-9]+[[:space:]]+[0-9]+[[:space:]]+[0-9\.]+:2049.*ESTABLISHED' |
-		awk '{print $4" "$5}' | 
-		while read dest src; do
-			ip=${dest%:*}
-			echo $src >> $mydir/$ip
-		done
+	store_tickles &
 	;;
 
     *)
