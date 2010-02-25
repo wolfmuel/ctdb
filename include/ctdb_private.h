@@ -105,6 +105,7 @@ struct ctdb_tunable {
 	uint32_t script_timeout;
 	uint32_t script_timeout_count; /* allow dodgy scripts to hang this many times in a row before we mark the node unhealthy */
 	uint32_t script_unhealthy_on_timeout; /* obsolete */
+	uint32_t script_log_timeout; /* Log an ERROR when a script took longer than this */
 	uint32_t recovery_grace_period;
 	uint32_t recovery_ban_period;
 	uint32_t database_hash_size;

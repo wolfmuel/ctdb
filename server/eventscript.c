@@ -472,6 +472,14 @@ static void ctdb_event_script_handler(struct event_context *ev, struct fd_event 
 	}
 
 	current->finished = timeval_current();
+
+	/* log something if it took too long */
+	if (ctdb->tunable.script_log_timeout > 0) {
+		if ((state->call == CTDB_EVENT_MONITOR) && (timeval_delta(&current->finished, &current->start) > ctdb->tunable.script_log_timeout)) {
+			DEBUG(DEBUG_ERR,("Monitor script %s took %.3lfs to complete\n", current->name, timeval_delta(&current->finished, &current->start)));
+		}
+	}
+
 	/* valgrind gets overloaded if we run next script as it's still doing
 	 * post-execution analysis, so kill finished child here. */
 	if (ctdb->valgrinding) {
