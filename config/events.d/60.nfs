@@ -75,10 +75,10 @@ case "$1" in
 		echo "ERROR: STATD is not responding. Trying to restart it. [rpc.statd $RPCSTATDOPTS]"
 	}
 
-
-	# check that NFS responds to rpc requests
-	[ "$CTDB_NFS_SKIP_KNFSD_ALIVE_CHECK" = "yes" ] || {
-	    ctdb_check_rpc "NFS" 100003 3
+	# check that NFS is running
+	service nfs status 2>/dev/null >/dev/null || {
+		echo NFS is not running
+		exit 1
 	}
 
 	# and that its directories are available
