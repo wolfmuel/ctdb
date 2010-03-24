@@ -77,7 +77,9 @@ case "$1" in
 
 	# check that NFS is running
 	service nfs status 2>/dev/null >/dev/null || {
-		echo NFS is not running
+		echo NFS is not running. Trying to restart NFS.
+		ctdb_service_stop
+		ctdb_service_start
 		exit 1
 	}
 
