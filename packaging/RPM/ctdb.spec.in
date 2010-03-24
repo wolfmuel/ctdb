@@ -5,7 +5,7 @@ Vendor: Samba Team
 Packager: Samba Team <samba@samba.org>
 Name: ctdb
 Version: 1.0.112
-Release: 12
+Release: 13
 Epoch: 0
 License: GNU GPL version 3
 Group: System Environment/Daemons
@@ -123,6 +123,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_docdir}/ctdb/tests/bin/ctdb_transaction
 
 %changelog
+* Wed Mar 25 2010 : Version 1.0.112-13
+ - Try to restart NFS if "service nfs start" failed.
+   BZ 61827
 * Wed Mar 11 2010 : Version 1.0.112-12
  - From christian ambach : drop the loglevel of a vacuuming message
  - From  Wolfgang Mueller-Friedt : fix bug in ctdb_setstatus
