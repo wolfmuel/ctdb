@@ -5,7 +5,7 @@ Vendor: Samba Team
 Packager: Samba Team <samba@samba.org>
 Name: ctdb
 Version: 1.0.112
-Release: 13
+Release: 14
 Epoch: 0
 License: GNU GPL version 3
 Group: System Environment/Daemons
@@ -123,6 +123,8 @@ rm -rf $RPM_BUILD_ROOT
 %{_docdir}/ctdb/tests/bin/ctdb_transaction
 
 %changelog
+* Mon Mar 29 2010 : Version 1.0.112-14
+ - Wipe the new serverid database before starting winbind
 * Wed Mar 25 2010 : Version 1.0.112-13
  - Try to restart NFS if "service nfs start" failed.
    BZ 61827
