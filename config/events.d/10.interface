@@ -17,6 +17,31 @@ loadconfig
 	exit 0
 }
 
+add_failover_block() {
+	# Make sure our chain exists
+	iptables -N ctdbfailover 2> /dev/null
+	
+	# make sure we link to it from INPUT
+	iptables -L INPUT -n | grep ctdbfailover >/dev/null 2>/dev/null || {
+		iptables -I INPUT -j ctdbfailover
+	}
+	# block this ip
+	iptables -I ctdbfailover -i $1 -d $2 -j DROP
+}
+
+delete_failover_block() {
+	iptables -D ctdbfailover -i $1 -d $2 -j DROP 2>/dev/null
+}
+
+delete_all_failover_blocks() {
+	# make sure to remova all links to the ctdbfailover table
+	while iptables -L INPUT -n | grep ctdbfailover >/dev/null 2>/dev/null ; do
+		iptables -D INPUT -j ctdbfailover
+	done
+	iptables -F ctdbfailover 2>/dev/null
+	iptables -X ctdbfailover 2>/dev/null
+}
+
 case "$1" in 
      #############################
      # called when ctdbd starts up
@@ -58,7 +83,7 @@ case "$1" in
 		 echo "Failed to add $ip/$maskbits on dev $iface"
 	}
 	# cope with the script being killed while we have the interface blocked
-	iptables -D INPUT -i $iface -d $ip -j DROP 2> /dev/null
+	delete_failover_block $iface $ip
 
 	# flush our route cache
 	echo 1 > /proc/sys/net/ipv4/route/flush
@@ -89,8 +114,8 @@ case "$1" in
 
 	failed=0
 	# we do an extra delete to cope with the script being killed
-	iptables -D INPUT -i $iface -d $ip -j DROP 2> /dev/null
-	iptables -I INPUT -i $iface -d $ip -j DROP
+	delete_failover_block $iface $ip
+	add_failover_block $iface $ip
 	kill_tcp_connections $ip
 
 	# the ip tool will delete all secondary IPs if this is the primary. To work around
@@ -111,7 +136,7 @@ case "$1" in
 		fi
 	    done
 	}
-	iptables -D INPUT -i $iface -d $ip -j DROP 2> /dev/null
+	delete_failover_block $iface $ip
 	[ $failed = 0 ] || {
 		 echo "Failed to del $ip on dev $iface"
 		 exit 1
@@ -125,14 +150,19 @@ case "$1" in
      ###########################################
      # called when ctdbd has finished a recovery
      recovered)
+	delete_all_failover_blocks
 	;;
 
      ####################################
      # called when ctdbd is shutting down
      shutdown)
+	delete_all_failover_blocks
 	;;
 
      monitor)
+	# make sure we dont block any ips when we are outside of recovery
+	delete_all_failover_blocks
+
 	INTERFACES=`cat $CTDB_PUBLIC_ADDRESSES | 
 		sed -e "s/^[^\t ]*[\t ]*//" -e "s/[\t ]*$//"`
 
