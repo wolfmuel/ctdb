@@ -2321,9 +2321,9 @@ static enum monitor_result verify_recmaster(struct ctdb_recoverd *rec, struct ct
 }
 
 
-/* called to check that the allocation of public ip addresses is ok.
+/* called to check that the local allocation of public ip addresses is ok.
 */
-static int verify_ip_allocation(struct ctdb_context *ctdb, struct ctdb_recoverd *rec, uint32_t pnn)
+static int verify_local_ip_allocation(struct ctdb_context *ctdb, struct ctdb_recoverd *rec, uint32_t pnn)
 {
 	TALLOC_CTX *mem_ctx = talloc_new(NULL);
 	struct ctdb_all_public_ips *ips = NULL;
@@ -2973,7 +2973,7 @@ again:
 	 */ 
 	if (ctdb->do_checkpublicip) {
 		if (rec->ip_check_disable_ctx == NULL) {
-			if (verify_ip_allocation(ctdb, rec, pnn) != 0) {
+			if (verify_local_ip_allocation(ctdb, rec, pnn) != 0) {
 				DEBUG(DEBUG_ERR, (__location__ " Public IPs were inconsistent.\n"));
 			}
 		}
@@ -3027,6 +3027,11 @@ again:
 			DEBUG(DEBUG_ERR,("Failed to read public ips from node : %u\n", 
 				ctdb->nodes[j]->pnn));
 			goto again;
+		}
+
+		if (verify_remote_ip_allocation(ctdb, ctdb->nodes[j]->public_ips)) {
+			DEBUG(DEBUG_ERR,("Node %d has inconsistent public ip allocation and needs update.\n", ctdb->nodes[j]->pnn));
+			rec->need_takeover_run = true;
 		}
 	}
 
